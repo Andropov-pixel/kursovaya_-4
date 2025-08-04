@@ -1,0 +1,53 @@
+{% extends 'newsletters/base.html' %}
+{% block content %}
+<h2 class="pt-3 pb-2 mb-3">Попытки рассылок</h2>
+<p>Всего попыток: {{ total_attempts }}</p>
+<p>Успешных попыток: {{ successful_attempts }}</p>
+<p>Неуспешных попыток: {{ unsucessful_attempts }}</p>
+<p>Количество отправленных сообщений: {{ sending_mails }}</p>
+<div class="table-responsive small">
+    {% if attempts %}
+    <table class="table table-striped table-sm">
+        <h2 class="pt-3 pb-2 mb-3">История попыток</h2>
+        <thead>
+        <tr>
+            <th scope="col">Тема рассылки</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Ответ сервера</th>
+            <th scope="col">Дата попытки</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>
+                {% if attempt.newsletter %}
+                    {{ attempt.newsletter.message.subject|default:"Без темы" }}
+                {% else %}
+                    Рассылка удалена
+                {% endif %}
+            </td>
+            <td>
+                <span class="badge {% if attempt.status == 'Успешно' %}bg-success{% else %}bg-danger{% endif %}">
+                    {{ attempt.status }}
+                </span>
+            </td>
+            <td>{{ attempt.answer|truncatechars:30 }}</td>
+            <td>{{ attempt.date_attempt|date:"d.m.Y H:i" }}</td>
+            <td><a href="{% url 'newsletters:newsletter_attempt_detail' attempt.pk %}" class="btn btn-outline-secondary btn-sm">Посмотреть</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info">
+        {% if user.is_authenticated %}
+            У вас пока нет попыток рассылок
+        {% else %}
+            Для просмотра статистики необходимо <a href="{% url 'users:login' %}" class="btn btn-link">войти</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

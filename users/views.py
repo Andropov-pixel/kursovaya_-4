@@ -1,101 +1,69 @@
-from django.contrib.auth import login, logout
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import (
-    LoginView,
-    PasswordResetView,
-    PasswordResetDoneView,
-    PasswordResetConfirmView,
-    PasswordResetCompleteView,
-)
-from django.core.checks import messages
-from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import CreateView, UpdateView
+import secrets
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, UpdateView, ListView
+from config.settings import EMAIL_HOST_USER
+from users.forms import UserRegisterForm, UserProfileForm
+from users.models import User
+from django.contrib import messages
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView
 
 
-from users.forms import RegisterForm, LoginForm, ProfileForm
-from users.models import User, Profile
-from django.views.generic import ListView
-
-
-class RegisterView(CreateView):
+class UserCreateView(CreateView):
     model = User
-    form_class = RegisterForm
-    template_name = "users/register.html"
-    success_url = reverse_lazy("messaging:mailing_list")
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
-        return redirect("messaging:mailing_list")
+        user.is_active = False
+        token = secrets.token_hex(16)
+        user.token = token
+        user.save()
+        host = self.request.get_host()
+        url = f'http://{host}/users/email-confirm/{token}/'
+        send_mail(
+            subject='Подтверждение почты',
+            message=f'Для подтверждения почты необходимо перейти по ссылке: {url}',
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email]
+        )
+        return super().form_valid(form)
 
 
-class LoginView(LoginView):
-    form_class = LoginForm
-    template_name = "users/login.html"
-
-    def get_success_url(self):
-        return reverse_lazy("messaging:mailing_list")
-
-
-def logout_view(request):
-    logout(request)
-    return redirect("messaging:mailing_list")
+def email_verification(request, token):
+    user = get_object_or_404(User, token=token)
+    user.is_active = True
+    user.save()
+    return redirect(reverse('users:login'))
 
 
-class ProfileView(UpdateView):
-    model = Profile
-    form_class = ProfileForm
-    template_name = "users/profile.html"
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserProfileForm
+    template_name = 'users/profile.html'
+    success_url = reverse_lazy('users:profile')
 
     def get_object(self, queryset=None):
-        profile, created = Profile.objects.get_or_create(user=self.request.user)
-        return profile
-
-    def get_success_url(self):
-        return reverse_lazy("users:profile")
+        return self.request.user
 
 
-class CustomPasswordResetView(PasswordResetView):
-    template_name = "users/password_reset_form.html"
-    email_template_name = "users/password_reset_email.html"
-    subject_template_name = "users/password_reset_subject.txt"
-    success_url = "/users/password_reset/done/"
-
-
-class CustomPasswordResetDoneView(PasswordResetDoneView):
-    template_name = "users/password_reset_done.html"
-
-
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = "users/password_reset_confirm.html"
-    success_url = "/users/reset/done/"
-
-
-class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-    template_name = "users/password_reset_complete.html"
-
-
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(ListView):
     model = User
-    template_name = "messaging/user_list.html"
-    context_object_name = "users"
+    template_name = 'users/user_list.html'
 
 
-class ToggleUserStatusView(LoginRequiredMixin, UserPassesTestMixin, View):
-    """Контроллер для блокировки/разблокировки пользователей"""
+def block_user(request, pk):
+    if not request.user.has_perm('users.can_block_user'):
+        messages.error(request, 'У вас нет прав для блокировки пользователей')
+        return redirect('newsletters:home')
 
-    def test_func(self):
-        # Проверяем права на блокировку пользователей
-        return self.request.user.has_perm("users.can_block_user")
+    user = get_object_or_404(User, pk=pk)
+    user.is_active = False
+    user.save()
 
-    def post(self, request, pk):
-        user = get_object_or_404(User, pk=pk)
-        user.is_active = not user.is_active
-        user.save()
-
-        action = "разблокирован" if user.is_active else "заблокирован"
-        messages.success(request, f"Пользователь {user.email} успешно {action}")
-
-        return redirect("messaging:user_list")
+    action = "разблокирован" if user.is_active else "заблокирован"
+    return redirect('users:user_list')
