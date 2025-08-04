@@ -1,0 +1,42 @@
+[
+{
+    "model": "newsletters.recipient",
+    "pk": 1,
+    "fields": {
+        "email": "kristina.rozhkova.2018@list.ru",
+        "full_name": "РКС",
+        "message": "админ",
+        "owner": null
+    }
+},
+{
+    "model": "newsletters.recipient",
+    "pk": 2,
+    "fields": {
+        "email": "rozkovakristina67@gmail.com",
+        "full_name": "Рожкова КС",
+        "message": "",
+        "owner": null
+    }
+},
+{
+    "model": "newsletters.recipient",
+    "pk": 3,
+    "fields": {
+        "email": "test@test.ru",
+        "full_name": "Test Test Test",
+        "message": "",
+        "owner": 1
+    }
+},
+{
+    "model": "newsletters.recipient",
+    "pk": 4,
+    "fields": {
+        "email": "sveta@mail.ru",
+        "full_name": "Света",
+        "message": "",
+        "owner": 2
+    }
+}
+]

@@ -1,0 +1,35 @@
+{% extends 'newsletters/base.html' %}
+
+{% block content %}
+<h2 class="pt-3 pb-2 mb-3">Рассылки</h2>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="{% url 'newsletters:newsletter_create' %}" class="btn btn-secondary btn-sm">Создать рассылку</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Тема</th>
+            <th>Статус</th>
+            <th>Период</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for newsletter in object_list %}
+        {% if newsletter.owner == request.user or perms.newsletters.view_newsletter %}
+        <tr>
+            <td>{{ newsletter.message.subject }}</td>
+            <td>{{ newsletter.status }}</td>
+            <td>{{ newsletter.start_sending|date:"d M Y" }} - {{ newsletter.end_sending|date:"d M Y" }}</td>
+            <td>
+                <a href="{% url 'newsletters:newsletter_detail' pk=newsletter.pk %}" class="btn btn-outline-secondary btn-sm">Просмотр</a>
+                {% if newsletter.owner == request.user %}
+                <a href="{% url 'newsletters:send_newsletter' pk=newsletter.pk %}" class="btn btn-outline-secondary btn-sm">Отправить</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

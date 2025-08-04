@@ -1,0 +1,38 @@
+[
+{
+    "model": "newsletters.message",
+    "pk": 1,
+    "fields": {
+        "subject": "Проверка",
+        "text": "Проверка",
+        "owner": null
+    }
+},
+{
+    "model": "newsletters.message",
+    "pk": 2,
+    "fields": {
+        "subject": "Без темы",
+        "text": "проверка 2",
+        "owner": null
+    }
+},
+{
+    "model": "newsletters.message",
+    "pk": 3,
+    "fields": {
+        "subject": "Акция",
+        "text": "Заходите на сайт",
+        "owner": 2
+    }
+},
+{
+    "model": "newsletters.message",
+    "pk": 4,
+    "fields": {
+        "subject": "1+1=3",
+        "text": "Купите 2 продукта и получите третий в подарок!",
+        "owner": 2
+    }
+}
+]

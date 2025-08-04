@@ -1,0 +1,23 @@
+{% extends 'newsletters/base.html' %}
+
+{% block content %}
+<div class="row pt-3 pb-2 mb-3">
+    <div class="col-lg-6 col-md-8 mx-auto">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Вы уверены, что хотите удалить письмо?</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url 'newsletters:message_list' %}"
+                       role="button">Отменить</a>
+                    {% if object.owner == request.user %}
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Удалить</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
