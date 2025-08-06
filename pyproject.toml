@@ -1,0 +1,25 @@
+[project]
+name = "mailing"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kristina-Rozhkova",email = "rozkovakristina67@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "psycopg2-binary (==2.9.10)",
+    "asgiref (==3.8.1)",
+    "dotenv (==0.9.9)",
+    "pillow (==11.2.1)",
+    "python-dotenv (==1.1.0)",
+    "sqlparse (==0.5.3)",
+    "django-crispy-forms (>=2.4,<3.0)",
+    "crispy-bootstrap5 (>=2025.6,<2026.0)",
+    "redis (>=6.2.0,<7.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

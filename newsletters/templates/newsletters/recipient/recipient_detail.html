@@ -1,0 +1,16 @@
+{% extends 'newsletters/base.html' %}
+
+{% block content %}
+<h2 class="pt-3 pb-2 mb-3">Клиент: {{ object.full_name }}</h2>
+<div class="card">
+    <div class="card-body">
+        <p><strong>Электронная почта:</strong> {{ object.email }}</p>
+        <p><strong>Комментарий:</strong> {{ object.message }} </p>
+        {% if object.owner == request.user %}
+        <a href="{% url 'newsletters:recipient_delete' object.pk %}" class="btn btn-outline-secondary btn-sm">Удалить</a>
+        <a href="{% url 'newsletters:recipient_update' object.pk %}" class="btn btn-outline-secondary btn-sm">Изменить</a>
+        {% endif %}
+        <a href="{% url 'newsletters:recipient_list' %}" class="btn btn-outline-secondary btn-sm">Назад</a>
+    </div>
+</div>
+{% endblock %}

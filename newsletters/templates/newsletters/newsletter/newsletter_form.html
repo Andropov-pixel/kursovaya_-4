@@ -1,0 +1,29 @@
+{% extends 'newsletters/base.html' %}
+{% block content %}
+<div class="row pt-3 pb-2 mb-3">
+    <div class="col-lg-6 col-md-8 mx-auto">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                {% if object %}
+                <h4 class="my-0 font-weight-normal">Редактирование рассылки</h4>
+                {% else %}
+                <h4 class="my-0 font-weight-normal">Создание рассылки</h4>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    {% if object %}
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Изменить</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Добавить</button>
+                    {% endif %}
+                    <a class="btn btn-outline-secondary btn-sm" href="{% url 'newsletters:newsletter_list' %}"
+                       role="button">Назад</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

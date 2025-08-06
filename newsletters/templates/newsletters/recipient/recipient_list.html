@@ -1,0 +1,30 @@
+{% extends 'newsletters/base.html' %}
+
+{% block content %}
+<h2 class="pt-3 pb-2 mb-3">Клиенты</h2>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="{% url 'newsletters:recipient_create' %}" class="btn btn-secondary btn-sm">Добавить клиента</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Комментарий</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for recipient in object_list %}
+        {% if recipient.owner == request.user or perms.newsletters.view_recipient %}
+        <tr>
+            <td>{{ recipient.full_name }}</td>
+            <td>{{ recipient.message }}</td>
+            <td>
+                <a href="{% url 'newsletters:recipient_detail' recipient.pk %}" class="btn btn-outline-secondary btn-sm">Просмотр</a>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'newsletters/base.html' %}
+
+{% block content %}
+<div class="container pt-3 pb-2 mb-3">
+    <h1 class="mb-4">Статистика рассылок</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Всего рассылок</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ total_newsletters }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Активных рассылок</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ active_newsletters }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Уникальных получателей</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ unique_recipients }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
