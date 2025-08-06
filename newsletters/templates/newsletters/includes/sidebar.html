@@ -1,0 +1,127 @@
+<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+    <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
+         aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarMenuLabel">Сервис рассылок</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
+                    aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3"
+             style="min-height: 100vh;">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                       href="{% url 'newsletters:home' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#house-fill"></use>
+                        </svg>
+                        Статистика
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'newsletters:newsletter_list' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#file-earmark"></use>
+                        </svg>
+                        Рассылки
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'newsletters:message_list' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#cart"></use>
+                        </svg>
+                        Письма
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'newsletters:recipient_list' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#people"></use>
+                        </svg>
+                        Клиенты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2"
+                       href="{% url 'newsletters:newsletter_attempt_list' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#graph-up"></use>
+                        </svg>
+                        Отчет
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.users.view_user %}
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:user_list' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#puzzle"></use>
+                        </svg>
+                        Пользователи
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <hr class="my-3">
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" class="dropdown-toggle rounded-circle" href="#" role="button"
+                             data-bs-toggle="dropdown" aria-expanded="false" width="40" height="40" alt="Аватар">
+                        {% else %}
+                        <img src="/media/users/default_avatar.png" class="dropdown-toggle rounded-circle" href="#"
+                             role="button" data-bs-toggle="dropdown" aria-expanded="false" width="40" height="40"
+                             alt="Аватар">
+                        {% endif %}
+                        Профиль
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="{% url 'users:profile' %}">
+                                <svg class="bi" aria-hidden="true">
+                                    <use xlink:href="#person-circle"></use>
+                                </svg>
+                                Редактировать
+                            </a>
+                        </li>
+                        <li>
+                            <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item d-flex align-items-center gap-2"
+                                        style="background:none; border:none; cursor:pointer; width:100%; text-align:left;">
+                                    <svg class="bi" aria-hidden="true">
+                                        <use xlink:href="#box-arrow-right"></use>
+                                    </svg>
+                                    Выйти
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:login' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#door-closed"></use>
+                        </svg>
+                        Войти
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" href="{% url 'users:register' %}">
+                        <svg class="bi" aria-hidden="true">
+                            <use xlink:href="#person-plus"></use>
+                        </svg>
+                        Зарегистрироваться
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

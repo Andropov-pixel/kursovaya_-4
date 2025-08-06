@@ -1,0 +1,52 @@
+[
+{
+    "model": "newsletters.newsletterattempt",
+    "pk": 1,
+    "fields": {
+        "date_attempt": "2025-07-07T13:51:25.879Z",
+        "status": "Не успешно",
+        "answer": "{'test@test.ru': (501, b'sender address must match authenticated user'), 'kristina.rozhkova.2018@list.ru': (503, b'sender not yet given'), 'rozkovakristina67@gmail.com': (503, b'sender not yet given')}",
+        "newsletter": 2
+    }
+},
+{
+    "model": "newsletters.newsletterattempt",
+    "pk": 2,
+    "fields": {
+        "date_attempt": "2025-07-07T13:54:57.698Z",
+        "status": "Не успешно",
+        "answer": "{'kristina.rozhkova.2018@list.ru': (501, b'sender address must match authenticated user'), 'rozkovakristina67@gmail.com': (503, b'sender not yet given')}",
+        "newsletter": 2
+    }
+},
+{
+    "model": "newsletters.newsletterattempt",
+    "pk": 3,
+    "fields": {
+        "date_attempt": "2025-07-07T14:20:27.043Z",
+        "status": "Не успешно",
+        "answer": "{'kristina.rozhkova.2018@list.ru': (501, b'sender address must match authenticated user')}",
+        "newsletter": 2
+    }
+},
+{
+    "model": "newsletters.newsletterattempt",
+    "pk": 4,
+    "fields": {
+        "date_attempt": "2025-07-07T14:25:19.948Z",
+        "status": "Успешно",
+        "answer": "Рассылка отправлена",
+        "newsletter": 2
+    }
+},
+{
+    "model": "newsletters.newsletterattempt",
+    "pk": 5,
+    "fields": {
+        "date_attempt": "2025-07-07T19:13:11.658Z",
+        "status": "Успешно",
+        "answer": "Рассылка отправлена",
+        "newsletter": 3
+    }
+}
+]

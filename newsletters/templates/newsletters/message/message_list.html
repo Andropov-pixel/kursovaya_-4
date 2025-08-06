@@ -1,0 +1,30 @@
+{% extends 'newsletters/base.html' %}
+
+{% block content %}
+<h2 class="pt-3 pb-2 mb-3">Мои письма</h2>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="{% url 'newsletters:message_create' %}" class="btn btn-secondary btn-sm">Создать письмо</a>
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Тема</th>
+        <th>Текст</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for message in object_list %}
+    {% if message.owner == request.user %}
+    <tr>
+        <td>{{ message.subject }}</td>
+        <td>{{ message.text|truncatechars:20 }}</td>
+        <td>
+            <a href="{% url 'newsletters:message_detail' pk=message.pk %}" class="btn btn-outline-secondary btn-sm">Просмотр</a>
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
