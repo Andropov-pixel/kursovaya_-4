@@ -1,4 +1,5 @@
 import secrets
+import logging
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
@@ -10,7 +11,39 @@ from users.models import User
 from django.contrib import messages
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
     PasswordResetCompleteView
+from django.http import JsonResponse
+from django.views import View
 
+logger = logging.getLogger(__name__)  # Получаем логгер для текущего модуля
+
+class UserView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            # Логируем вход в метод и параметры запроса
+            logger.info(
+                f"Запрос GET /users. "
+                f"Параметры: {request.GET}, "
+                f"User-Agent: {request.headers.get('User-Agent')}"
+            )
+
+            # Пример обработки данных
+            user_id = request.GET.get("user_id")
+            if not user_id:
+                logger.warning("Не передан user_id")
+                return JsonResponse({"error": "user_id обязателен"}, status=400)
+
+            # Имитация работы (например, запрос в БД)
+            logger.debug(f"Поиск пользователя с id={user_id}")
+            user_data = {"id": user_id, "name": "Test User"}
+
+            # Логируем успешный ответ
+            logger.info(f"Успешный ответ для user_id={user_id}")
+            return JsonResponse(user_data)
+
+        except Exception as e:
+            # Логируем ошибку
+            logger.error(f"Ошибка в UserView: {str(e)}", exc_info=True)
+            return JsonResponse({"error": "Внутренняя ошибка сервера"}, status=500)
 
 class UserCreateView(CreateView):
     model = User
